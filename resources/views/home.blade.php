@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    <a class="btn btn-info" href="{{ url('/contacts') }}" >Contacts</a>
                 </div>
             </div>
         </div>
