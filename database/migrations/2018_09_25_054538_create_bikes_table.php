@@ -20,6 +20,8 @@ class CreateBikesTable extends Migration
             $table->string('year');
             $table->text('mods');
             $table->string('picture');
+            $table->integer('user_id');
+            $table->integer('builder_id');
             $table->timestamps();
         });
     }

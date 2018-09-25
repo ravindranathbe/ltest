@@ -51,7 +51,7 @@ class Bike extends Model
     * @var array
     */
     protected $fillable = [
-        'make', 'model', 'year', 'mods', 'picture',
+        'make', 'model', 'year', 'mods', 'picture', 'user_id', 'builder_id',
     ];
     
     /**
