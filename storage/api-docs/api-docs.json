@@ -49,6 +49,120 @@
                     "example": "http://www.sample.com/my.bike.jpg"
                 }
             }
+        },
+        "Builder": {
+            "required": [
+                "name",
+                "description",
+                "location"
+            ],
+            "properties": {
+                "name": {
+                    "description": "Builder name",
+                    "type": "string",
+                    "example": "Jesse James"
+                },
+                "description": {
+                    "description": "Famous Motorcycle builder from Texas",
+                    "type": "string",
+                    "example": "Austin Speed Shop"
+                },
+                "location": {
+                    "description": "Texas/USA",
+                    "type": "string",
+                    "example": "Austin, Texas"
+                }
+            }
+        },
+        "Garage": {
+            "required": [
+                "name",
+                "custumer_level"
+            ],
+            "properties": {
+                "name": {
+                    "description": "Jhonny Garage",
+                    "type": "string",
+                    "example": "Exhaust"
+                },
+                "customer_level": {
+                    "description": "Whats the garage level",
+                    "type": "integer",
+                    "example": "10"
+                }
+            }
+        },
+        "Item": {
+            "required": [
+                "type",
+                "name",
+                "company"
+            ],
+            "properties": {
+                "type": {
+                    "description": "Item Type",
+                    "type": "string",
+                    "example": "Exhaust"
+                },
+                "name": {
+                    "description": "Item name",
+                    "type": "string",
+                    "example": "2 into 1 Exhaust"
+                },
+                "company": {
+                    "description": "Produced by: some company",
+                    "type": "string",
+                    "example": "Vance and Hines"
+                }
+            }
+        },
+        "Rating": {
+            "required": [
+                "bike_id",
+                "user_id",
+                "rating"
+            ],
+            "properties": {
+                "biker_id": {
+                    "description": "Bike id",
+                    "type": "integer",
+                    "example": "1"
+                },
+                "user_id": {
+                    "description": "User id",
+                    "type": "integer",
+                    "example": "2"
+                },
+                "rating": {
+                    "description": "Vote by rating",
+                    "type": "integer",
+                    "example": "10"
+                }
+            }
+        },
+        "User": {
+            "required": [
+                "name",
+                "email",
+                "password"
+            ],
+            "properties": {
+                "name": {
+                    "description": "User name",
+                    "type": "string",
+                    "example": "John Conor"
+                },
+                "email": {
+                    "description": "Email Address",
+                    "type": "string",
+                    "example": "john.conor@terminator.com"
+                },
+                "password": {
+                    "description": "A very secure password",
+                    "type": "string",
+                    "example": "123456"
+                }
+            }
         }
     }
 }
