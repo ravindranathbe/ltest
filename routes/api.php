@@ -17,9 +17,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResources([
-    'bikes' => 'API\BikeController',
-    'builders' => 'API\BuilderController',
-    'items' => 'API\ItemController',
-    'bikes/{bike}/ratings' => 'API\RatingController'
-]);
+// Route::middleware('auth:api')->group(function () {
+    Route::apiResources([
+        'bikes' => 'API\BikeController',
+        'builders' => 'API\BuilderController',
+        'items' => 'API\ItemController',
+        'bikes/{bike}/ratings' => 'API\RatingController'
+    ]);
+// });
