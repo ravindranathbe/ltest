@@ -142,6 +142,9 @@
                     },
                     "404": {
                         "description": "Not Found"
+                    },
+                    "405": {
+                        "description": "Invalid HTTP Method"
                     }
                 }
             },
@@ -168,13 +171,24 @@
                             "$ref": "#/definitions/Bike"
                         }
                     },
+                    "401": {
+                        "description": "Refused: Unauthenticated"
+                    },
                     "422": {
                         "description": "Missing mandatory field"
                     },
                     "404": {
                         "description": "Not Found"
+                    },
+                    "405": {
+                        "description": "Invalid HTTP Method"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
             }
         },
         "/api/bikes/{id}": {
@@ -201,8 +215,16 @@
                     },
                     "404": {
                         "description": "Not Found"
+                    },
+                    "405": {
+                        "description": "Invalid HTTP Method"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
             },
             "put": {
                 "tags": [
@@ -239,8 +261,19 @@
                     },
                     "404": {
                         "description": "Not Found"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "405": {
+                        "description": "Invalid HTTP Method"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
             },
             "delete": {
                 "tags": [
@@ -264,8 +297,16 @@
                     },
                     "204": {
                         "description": "Success: successful deleted"
+                    },
+                    "405": {
+                        "description": "Invalid HTTP Method"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "api_key": []
+                    }
+                ]
             }
         },
         "/api/builders": {

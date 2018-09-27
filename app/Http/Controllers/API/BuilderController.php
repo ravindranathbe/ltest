@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Builder;
 use Validator;
+use App\Http\Resources\BuildersResource;
 
 class BuilderController extends Controller
 {
@@ -118,10 +119,11 @@ class BuilderController extends Controller
         * )
     * )
      */
-    public function show($id)
+    public function show(Builder $builder) // $id)
     {
-        $showBuilderById = Builder::with('Bike')->findOrFail($id);
-        return $showBuilderById;
+        // $showBuilderById = Builder::with('Bike')->findOrFail($id);
+        // return $showBuilderById;
+        return new BuildersResource($builder);
     }
 
     /**

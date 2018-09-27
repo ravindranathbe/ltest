@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Bike;
 use Validator;
+use App\Http\Resources\BikesResource;
 
 class BikeController extends Controller
 {
@@ -35,6 +36,10 @@ class BikeController extends Controller
         * @SWG\Response(
             * response="404",
             * description="Not Found"
+        * ),
+        * @SWG\Response(
+            * response="405",
+            * description="Invalid HTTP Method"
         * )
     * ),
     */
@@ -42,6 +47,9 @@ class BikeController extends Controller
     {
         $listBikes = Bike::all();
         return $listBikes;
+        
+        // Using Paginate method We explain this later in the book
+        // return BikesResource::collection(Bike::with('ratings')->paginate(10));
     }
 
     /**
@@ -67,13 +75,24 @@ class BikeController extends Controller
             * @SWG\Schema(ref="#/definitions/Bike")
         * ),
         * @SWG\Response(
+            * response=401,
+            * description="Refused: Unauthenticated"
+        * ),
+        * @SWG\Response(
             * response="422",
             * description="Missing mandatory field"
         * ),
         * @SWG\Response(
             * response="404",
             * description="Not Found"
-        * )
+        * ),
+        * @SWG\Response(
+            * response="405",
+            * description="Invalid HTTP Method"
+        * ),
+        * security={
+            * { "api_key":{} }
+        * }
     * ),
     */
     public function store(Request $request)
@@ -90,8 +109,19 @@ class BikeController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        $createBike = Bike::create($request->all());
-        return $createBike;
+        // $createBike = Bike::create($request->all());
+        // return $createBike;
+        
+        // Creating a record in a different way
+        $createBike = Bike::create([
+            'user_id' => $request->user()->id,
+            'make' => $request->make,
+            'model' => $request->model,
+            'year' => $request->year,
+            'mods' => $request->mods,
+            'picture' => $request->picture,
+        ]);
+        return new BikesResource($createBike);
     }
     
     /**
@@ -119,13 +149,22 @@ class BikeController extends Controller
         * @SWG\Response(
             * response="404",
             * description="Not Found"
-        * )
+        * ),
+        * @SWG\Response(
+            * response="405",
+            * description="Invalid HTTP Method"
+        * ),
+        * security={
+            * { "api_key":{} }
+        * }
     * ),
     */
-    public function show($id)
+    public function show(Bike $bike) // ($id)
     {
-        $showBikeById = Bike::with(['items', 'builder', 'garages'])->findOrFail($id);
-        return $showBikeById;
+        /* $showBikeById = Bike::with(['items', 'builder', 'garages'])->findOrFail($id);
+        return $showBikeById; */
+        
+        return new BikesResource($bike);
     }
     
     /**
@@ -165,12 +204,23 @@ class BikeController extends Controller
         * @SWG\Response(
             * response="404",
             * description="Not Found"
-        * )
+        * ),
+        * @SWG\Response(
+            * response="403",
+            * description="Forbidden"
+        * ),
+        * @SWG\Response(
+            * response="405",
+            * description="Invalid HTTP Method"
+        * ),
+        * security={
+            * { "api_key":{} }
+        * }
     * ),
     */
-    public function update(Request $request, $id)
+    public function update(Request $request, Bike $bike) // $id)
     {
-        $validator = Validator::make($request->all(), [
+        /* $validator = Validator::make($request->all(), [
             'make' => 'required',
             'model' => 'required',
             'year'=> 'required',
@@ -184,13 +234,22 @@ class BikeController extends Controller
 
         $updateBikeById = Bike::findOrFail($id);
         $updateBikeById->update($request->all());
-        return $updateBikeById;
+        return $updateBikeById; */
+        
+        // check if currently authenticated user is the bike owner
+        if ($request->user()->id !== $bike->user_id) {
+            return response()->json(['error' => 'You can only edit your own bike.'], 403);
+        }
+
+        $bike->update($request->only(['make', 'model', 'year', 'mods', 'picture']));
+        return new BikesResource($bike);
     }
 
     /**
     * Remove the specified resource from storage.
     *
-    * @param int $id* @return \Illuminate\Http\Response
+    * @param int $id
+    * @return \Illuminate\Http\Response
     *
     * @SWG\Delete(
         * path="/api/bikes/{id}",
@@ -213,11 +272,18 @@ class BikeController extends Controller
             * response=204,
             * description="Success: successful deleted"
         * ),
+        @SWG\Response(
+            * response="405",
+            * description="Invalid HTTP Method"
+        * ),
+        * security={
+            * { "api_key":{} }
+        * }
     * )
     */
     public function destroy($id)
     {
-        $deleteBikeById = Bike::find($id)->delete();
+        $deleteBikeById = Bike::findOrFail($id)->delete();
         return response()->json([], 204);
     }
     
